@@ -9,6 +9,7 @@ use std::{
     fs::{self, DirBuilder},
     io::Write,
     process::Command,
+    path::PathBuf,
 };
 
 use crate::print::zeta_message;
@@ -143,6 +144,7 @@ fn new(target: &str, only: &Option<Platform>) {
         emoji: "😀".to_string(),
         r#type: "tech".to_string(),
         topics: vec![],
+        qiita_id: Some("".to_string()),
         published: false,
         only: only.clone(),
     };
@@ -153,6 +155,7 @@ fn new(target: &str, only: &Option<Platform>) {
 }
 
 fn build(target: &str) {
+    let target = &PathBuf::from(target).file_stem().unwrap().to_os_string().into_string().unwrap();
     let Ok(file) = fs::read_to_string(format!("zeta/{}.md", target)) else {
         zeta_error("Target not found");
         return;
